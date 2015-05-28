@@ -1,1 +1,102 @@
-Hello world
+<html>
+<head>
+    <title>B o u n c e</title>
+    <script src="lib/three.js"></script>
+    <script src="lib/jquery-2.0.3.min.js"></script>
+    <script src="src/fx.js"></script>
+    <script src="src/levels.js"></script>
+    <script src="src/bullet.js"></script>
+    <script src="src/tunnel.js"></script>
+    <script src="src/enemy.js"></script>
+    <script src="src/bounce.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/csshake.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Sigmar+One' rel='stylesheet' type='text/css'>
+    <style>
+        body { padding: 0; margin: 0; }
+        * {
+            cursor: none;
+            font-family: 'Sigmar One', cursive;
+            font-size: 24px;
+            /* disable selection */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        #level_intro, #looser, #winner {
+            width: 100%;
+            position: fixed;
+            top: 50%;
+            left: 50%
+            margin-left: -150px;
+            margin-top: -30px;
+            text-align: center;
+            color: #2244ff;
+            opacity: 0.9;
+        }
+        #level_name, #loose_message, #winner_message {
+            font-size: 90px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        #dashboard {
+            position: fixed;
+            left: 0; top: 0;
+            opacity: 0.75;
+            width: 100%;
+        }
+        .indash {
+            float: left;
+            width: 33%;
+            color: #82c4ff;
+            -webkit-text-stroke: 1px black;
+            text-shadow:
+               -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                 1px 1px 0 #000;
+        }
+        #shields {
+            text-align: center;
+        }
+        #level {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<audio id='gun_audio2' src='audio/gun2.mp3' loop preload></audio>
+<audio id='gun_audio' src='audio/gun.mp3' loop preload></audio>
+<audio id='explode' src='audio/explosion.mp3' preload></audio>
+<audio id='explode2' src='audio/explosion2.mp3' preload></audio>
+<audio id='music' src='audio/music.wav' loop preload></audio>
+
+<div id="looser" style="display: none;">
+    <div id="loose_message" class="shake shake-little shake-constant">You have died.</div>
+    <div><a href="#" onclick="location.reload();">Try Again</a></div>
+</div>
+
+<div id="winner" style="display: none;">
+    <div id="winner_message" class="shake shake-little shake-constant">The galaxy is free of evil.</div>
+    <div><a href="#" onclick="location.reload();">Play Again</a></div>
+</div>
+
+<div id="level_intro" style="display: none;">
+    <div id="level_name" class="shake shake-little shake-constant"></div>
+    <div>Get Ready...</div>
+</div>
+<div id="dashboard" style="display: none;">
+    <div id="score" class="indash">Score: <span id="score_value">0</span></div>
+    <div id="shields" class="indash">Shields: <span id="shields_value">100</span>%</div>
+    <div id="level" class="indash">Level: <span id="level_value">1</span></div>
+</div>
+<script>
+    $(document).ready(function() {
+        Bounce.start();
+    })
+</script>
+</body>
+</html>
