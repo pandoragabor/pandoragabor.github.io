@@ -42,6 +42,20 @@
             font-weight: bold;
             text-transform: uppercase;
         }
+        #high-scores {
+            width: 400px;
+            position: fixed;
+            left: 30%;
+            top: 10%;
+            color: #2244ff;
+            text-align: center;
+        }
+        .score div {
+            display: inline-block;
+        }
+        .score-points {
+            float: right;
+        }
         #dashboard {
             position: fixed;
             left: 0; top: 0;
@@ -83,6 +97,10 @@
 <div id="winner" style="display: none;">
     <div id="winner_message" class="shake shake-little shake-constant">The galaxy is free of evil.</div>
     <div><a href="#" onclick="location.reload();">Play Again</a></div>
+</div>
+
+<div id="high-scores" style="display: none;">
+    <h1>High Scores</h1>
 </div>
 
 <div id="level_intro" style="display: none;">
