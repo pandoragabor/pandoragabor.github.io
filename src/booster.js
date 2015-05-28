@@ -40,6 +40,7 @@ function Booster(booster_def) {
 
 Booster.prototype.move = function(dt) {
     this.obj.position.x -= dt * this.booster_def.speed;
+    this.obj.position.y += Math.sin(deg2rad(this.obj.position.x / 2)) * 4;
     this.obj.rotation.x += dt * 0.01;
     return this.obj.position.x <= -window.innerWidth / 2;
 };
