@@ -103,11 +103,15 @@ Bounce.prototype.init = function() {
     this.explode2 = $("#explode2")[0];
     this.gun_audio2 = $("#gun_audio2")[0];
     this.gun_audio = $("#gun_audio")[0];
+    this.ding = $("#ding")[0];
+    this.scrape = $("#scrape")[0];
     this.gun_audio.playbackRate = 4.0;
     this.explode.volume = GAME_FX_VOLUME;
     this.explode2.volume = GAME_FX_VOLUME;
     this.gun_audio.volume = GAME_FX_VOLUME;
     this.gun_audio2.volume = GAME_FX_VOLUME;
+    this.ding.volume = GAME_FX_VOLUME;
+    this.scrape.volume = GAME_FX_VOLUME;
 
     // init effects
     this.muzzle_fx = Effect.create_effect("muzzle_fire");
@@ -308,6 +312,13 @@ Bounce.prototype.check_collisions = function(now, dt) {
         for(var i = 0; i < this.boosters.length; i++) {
             if(this.boosters[i].overlaps(this.ship.position.x - 30, this.ship.position.y - 20,
                     this.ship.position.x + 30, this.ship.position.y + 20)) {
+
+                var fx = Effect.create_effect("booster");
+                fx.particles.position.copy(this.ship.position);
+                this.fxs.push(fx);
+                this.scene.add(fx.particles);
+                this.ding.play();
+
                 this.boosters[i].booster_def.action(now);
                 this.scene.remove(this.boosters[i].obj);
                 this.boosters.splice(i, 1);
@@ -332,6 +343,7 @@ Bounce.prototype.check_collisions = function(now, dt) {
                     fx.particles.position.copy(this.ship.position);
                     this.fxs.push(fx);
                     this.scene.add(fx.particles);
+                    this.scrape.play();
                 }
                 this.last_collision = now;
                 break;

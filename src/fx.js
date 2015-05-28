@@ -91,9 +91,9 @@ EFFECTS = {
             if(window.bounce["debris"] == null) {
                 vertex.x = window.innerWidth * (Math.random() - 0.5);
             } else {
-                vertex.x = window.innerWidth / 2;
+                vertex.x = window.innerWidth / 2 + window.innerWidth * Math.random();
             }
-            vertex.y = window.innerHeight * (Math.random() - 0.5)
+            vertex.y = window.innerHeight * (Math.random() - 0.5);
             vertex.z = 60;
             vertex["speed"] = Math.random() * 5 + 100;
         },
@@ -122,6 +122,26 @@ EFFECTS = {
             if(vertex.length() > 70 * Math.random() + 20) {
                 this.init_vertex(vertex);
             }
+        }
+    },
+    booster: {
+        color: 0xeeff88,
+        count: 400,
+        size: 40,
+        texture: PARTICLE_IMG,
+        opacity: 0.25,
+        ttl: 500, // live forever
+        init_vertex: function(vertex) {
+            vertex.x = Math.random() * 20 - 10;
+            vertex.y = Math.random() * 20 - 10;
+            vertex["speed"] = Math.random() * 10 + 5;
+        },
+        move_vertex: function(vertex, dt) {
+            var y = vertex.y;
+            var d = dt * 0.5;
+            var delta = (Math.random() * d/2 + d/2);
+            Effect.grow_vector(vertex, delta);
+            vertex.y = y - dt * 0.01 * vertex["speed"];
         }
     }
 

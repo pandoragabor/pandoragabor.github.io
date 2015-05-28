@@ -16,6 +16,14 @@ var BOOSTERS = [
             window.bounce.power_timer = now;
             $("#power_value").empty().append(window.bounce.power);
         }
+    },
+    {
+        color: 0xccaa22,
+        speed: 0.6,
+        action: function(now) {
+            window.bounce.score += 500;
+            $("#score_value").empty().append(window.bounce.score);
+        }
     }
 
 ];
