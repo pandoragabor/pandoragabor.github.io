@@ -234,6 +234,8 @@ Bounce.prototype.play_level = function(now, dt) {
     if(this.level_state == 0) {
         // level intro
         $("#music").animate({volume: 0}, 1500);
+        this.wave = 0;
+        this.group_indexes = null;
         this.level += 1;
         if(this.level >= LEVELS.length) {
             this.level_state = 3;
@@ -290,7 +292,6 @@ Bounce.prototype.play_level = function(now, dt) {
         if(this.enemies.length == 0 && this.group_indexes.length == 0) {
             this.wave++;
             if(this.wave >= LEVELS[this.level].waves.length) {
-                this.wave = 0;
                 this.level_state=0;
             } else {
                 this.group_indexes = null;
