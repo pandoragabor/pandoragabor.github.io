@@ -240,7 +240,10 @@ Bounce.prototype.play_level = function(now, dt) {
         if(this.level >= LEVELS.length) {
             this.level_state = 3;
             this.scene.remove(this.ship);
-            if(!$("#looser").is(":visible")) $("#winner").fadeIn();
+            if(!$("#looser").is(":visible")) {
+                $("#winner").fadeIn();
+                this.show_high_scores();
+            }
             return;
         }
         console.log("Starting Level=" + this.level);
@@ -321,6 +324,7 @@ Bounce.prototype.check_collisions = function(now, dt) {
                         this.start_explosion(this.ship.position);
                         this.scene.remove(this.ship);
                         $("#looser").fadeIn();
+                        this.show_high_scores();
                     }
                 } else {
                     // damage effect
@@ -394,3 +398,30 @@ Bounce.prototype.animate = function() {
     this.renderer.render(this.scene, this.camera);
 };
 
+Bounce.prototype.show_high_scores = function() {
+    var score_html = function(name, points) {
+        return '<div class="score"><div class="scorer-name">' + name + '</div><div class="score-points">' + points + '</div></div>';
+    }
+
+    if (!this.scores_displayed) {
+        var scores = JSON.parse(localStorage.getItem('bsu_scores')) || [{name: 'DEV', points: 100}, {name: 'DEV', points: 100}, {name: 'DEV', points: 100}, {name: 'DEV', points: 100}, {name: 'DEV', points: 100}];
+
+        scores = scores.sort(function(a, b) { return b.points - a.points; });
+        if (this.score > scores[scores.length-1].points) {
+            scores[scores.length-1] = {name: this.get_high_score_name(), points: this.score};
+            scores = scores.sort(function(a, b) { return b.points - a.points; });
+        }
+        localStorage.setItem('bsu_scores', JSON.stringify(scores));
+
+        scores.forEach(function(score) {
+            $("#high-scores").append(score_html(score.name, score.points));
+        });
+        this.scores_displayed = true;
+    }
+
+    $("#high-scores").fadeIn();
+};
+
+Bounce.prototype.get_high_score_name = function() {
+    return window.prompt("New high score! Enter your initials:").slice(0, 3);
+};
