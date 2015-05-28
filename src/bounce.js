@@ -413,7 +413,7 @@ Bounce.prototype.animate = function() {
 Bounce.prototype.show_high_scores = function() {
     var score_html = function(name, points) {
         return '<div class="score"><div class="scorer-name">' + name + '</div><div class="score-points">' + points + '</div></div>';
-    }
+    };
 
     if (!this.scores_displayed) {
         var scores = JSON.parse(localStorage.getItem('bsu_scores')) || [{name: 'DEV', points: 100}, {name: 'DEV', points: 100}, {name: 'DEV', points: 100}, {name: 'DEV', points: 100}, {name: 'DEV', points: 100}];
@@ -435,5 +435,8 @@ Bounce.prototype.show_high_scores = function() {
 };
 
 Bounce.prototype.get_high_score_name = function() {
+    this.gun_audio.pause();
+    this.gun_audio2.pause();
+    this.shooting = false;
     return window.prompt("New high score! Enter your initials:").slice(0, 3);
 };
