@@ -73,5 +73,27 @@ var LEVELS = [
                 ]
             }
         ]
+    },
+    {
+        name: "Level 3",
+        waves: [
+            {
+                name: "Wave 1",
+                groups: [
+                    a(1500, 25, 12, 0.3, "elliptical", 0x73880A),
+                    b(1500, 25, 12, 0.5, "diagonal", 0x6BBA70),
+                    a(15000, 25, 8, 0.75, "elliptical", 0x73880A),
+                    b(15000, 25, 5, 1.0, "diagonal", 0x6BBA70)
+                ]
+            },
+            {
+                name: "Wave 2",
+                groups: [
+                    a(1500, 25, 12, 0.3, "elliptical", 0x73880A),
+                    b(1500, 25, 12, 0.5, "diagonal", 0x6BBA70),
+                    b(15000, 30, 10, 0.75, "hunter", 0xBA3370)
+                ]
+            }
+        ]
     }
 ];

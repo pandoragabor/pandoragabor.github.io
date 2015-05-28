@@ -7,6 +7,7 @@ function Enemy(group_def, leader) {
     this.leader = leader;
     this.dir = new THREE.Vector3(0, 0, 0);
     this.tmp = new THREE.Vector3(0, 0, 0);
+    this.end_point = new THREE.Vector3(0, 0, 0);
     this.group_def = group_def;
     this.hits = group_def.hits;
 
@@ -36,25 +37,37 @@ Enemy.prototype.move_to = function(dt, point, min_dist) {
 Enemy.prototype.move = function(now, dt, player_obj) {
     if(this.leader == null) {
         if (this.group_def.movement == "elliptical") {
-            if (this.path == null || this.path_index >= this.path.length) {
-                var end_point;
-                if (this.obj.position.x < player_obj.position.x) {
-                    end_point = new THREE.Vector3(player_obj.position.x + 400, player_obj.position.y, 0);
+            if (this.path == null || this.path_index >= 1) {
+                if(Math.random() > 0.5) {
+                    // target the player
+                    this.tmp.copy(player_obj.position);
+
+                    if (this.obj.position.x < this.tmp.x) {
+                        this.end_point.set(this.tmp.x + 400, this.tmp.y, 0);
+                    } else {
+                        this.end_point.set(this.tmp.x - 400, this.tmp.y, 0);
+                    }
+
                 } else {
-                    end_point = new THREE.Vector3(player_obj.position.x - 400, player_obj.position.y, 0);
+                    // random point on other side of screen
+                    this.tmp.set(
+                            (window.innerWidth/2) * (this.obj.position.x < 0 ? 1 : -1),
+                            Math.random() * window.innerHeight - window.innerHeight/2,
+                        0);
+                    this.end_point.copy(this.tmp);
+                    this.end_point.x += this.obj.position.x < 0 ? 200 : -200
                 }
-                var curve = new THREE.CubicBezierCurve3(
+
+                this.path = new THREE.CubicBezierCurve3(
                     new THREE.Vector3(this.obj.position.x, this.obj.position.y, 0),
-                    new THREE.Vector3(player_obj.position.x, player_obj.position.y - 400, 0),
-                    new THREE.Vector3(player_obj.position.x, player_obj.position.y + 400, 0),
-                    end_point);
-                this.path = curve.getPoints(50);
+                    new THREE.Vector3(this.tmp.x, this.tmp.y - 400, 0),
+                    new THREE.Vector3(this.tmp.x, this.tmp.y + 400, 0),
+                    this.end_point);
                 this.path_index = 0;
             }
-            if (this.path_index < this.path.length) {
-                if (this.move_to(dt, this.path[this.path_index], 5)) {
-                    this.path_index++;
-                }
+            if (this.path_index < 1) {
+                this.obj.position.copy(this.path.getPoint(this.path_index));
+                this.path_index += dt * 0.001 * this.group_def.speed;
             }
         } else if(this.group_def.movement == "diagonal") {
             var d = dt * this.group_def.speed;
@@ -85,7 +98,12 @@ Enemy.prototype.move = function(now, dt, player_obj) {
             this.move_to(dt, player_obj.position, 5);
         }
     } else {
-        this.move_to(dt, this.leader.obj.position, this.group_def.size * 2);
+        // follow the leader
+        var dist = this.leader.obj.position.distanceTo(this.obj.position);
+        var desired = this.group_def.size * 2;
+        var speed = dist > desired ? dist - desired : 0;
+        this.dir.copy(this.leader.obj.position).sub(this.obj.position).normalize().multiplyScalar(speed);
+        this.obj.position.add(this.dir);
     }
 };
 

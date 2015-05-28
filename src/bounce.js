@@ -341,7 +341,7 @@ Bounce.prototype.animate = function() {
     this.fps_counter++;
     if(this.fps_counter >= 25) {
         var fps = this.fps_counter / (now - this.fps_start) * 1000;
-        document.title = "B o u n c e - " + fps.toFixed(2);
+        document.title = "BSU - " + fps.toFixed(2);
         this.fps_counter = 0;
         this.fps_start = now;
     }
