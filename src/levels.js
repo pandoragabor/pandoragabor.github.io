@@ -1,27 +1,27 @@
-function green(delay, size, count, speed) {
+function a(delay, size, count, speed, movement, color) {
     return {
         delay: delay,
         enemies: count,
-        movement: "elliptical",
+        movement: movement,
         speed: speed,
         fire: false,
         size: size,
-        color: 0x73880A,
+        color: color,
         hits: 15,
         value: 100,
         damage: 5
     };
 }
 
-function blue(delay, size, count, speed) {
+function b(delay, size, count, speed, movement, color) {
     return {
         delay: delay,
         enemies: count,
-        movement: "diagonal",
+        movement: movement,
         speed: speed,
         fire: false,
         size: size,
-        color: 0x6BBA70,
+        color: color,
         hits: 7,
         value: 100,
         damage: 5
@@ -36,16 +36,16 @@ var LEVELS = [
             {
                 name: "Wave 1",
                 groups: [
-                    green(1500, 30, 9, 0.3),
-                    blue(15000, 20, 6, 0.5)
+                    a(1500, 30, 9, 0.3, "elliptical", 0x73880A),
+                    b(15000, 20, 6, 0.5, "diagonal", 0x6BBA70)
                 ]
             },
             {
                 name: "Wave 2",
                 groups: [
-                    green(1500, 40, 8, 0.4),
-                    blue(15000, 20, 16, 0.3),
-                    blue(30000, 10, 16, 0.5)
+                    a(1500, 40, 8, 0.4, "elliptical", 0x73880A),
+                    b(15000, 20, 16, 0.3, "diagonal", 0x6BBA70),
+                    b(30000, 10, 16, 0.5, "hunter", 0xBA3370)
                 ]
             }
         ]
@@ -56,20 +56,20 @@ var LEVELS = [
             {
                 name: "Wave 1",
                 groups: [
-                    green(1500, 30, 6, 0.2),
-                    green(15000, 30, 6, 0.3),
-                    blue(30000, 20, 6, 0.5),
-                    blue(45000, 10, 6, 0.4)
+                    a(1500, 30, 6, 0.2, "elliptical", 0x73880A),
+                    a(15000, 30, 6, 0.3, "elliptical", 0x73880A),
+                    b(30000, 20, 6, 0.5, "hunter", 0xBA3370),
+                    b(45000, 10, 6, 0.4, "diagonal", 0x6BBA70)
                 ]
             },
             {
                 name: "Wave 2",
                 groups: [
-                    green(1500, 40, 5, 0.5),
-                    green(15000, 40, 5, 0.5),
-                    blue(30000, 20, 5, 0.3),
-                    blue(45000, 40, 5, 0.7),
-                    blue(60000, 20, 5, 0.4)
+                    a(1500, 40, 5, 0.5, "elliptical", 0x73880A),
+                    a(15000, 40, 5, 0.5, "elliptical", 0x73880A),
+                    b(30000, 20, 5, 0.3, "diagonal", 0x6BBA70),
+                    b(45000, 40, 5, 0.7, "hunter", 0xBA3370),
+                    b(60000, 20, 5, 0.4, "diagonal", 0x6BBA70)
                 ]
             }
         ]

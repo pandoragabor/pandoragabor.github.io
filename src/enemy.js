@@ -1,3 +1,8 @@
+var NW = 0;
+var NE = 1;
+var SW = 2;
+var SE = 3;
+
 function Enemy(group_def, leader) {
     this.leader = leader;
     this.dir = new THREE.Vector3(0, 0, 0);
@@ -6,9 +11,8 @@ function Enemy(group_def, leader) {
     this.hits = group_def.hits;
 
     this.path = null;
-    this.last_path_check = 0;
     this.path_index = 0;
-    this.path_target = new THREE.Vector3(0, 0, 0);
+    this.diag_dir = NW;
 
     this.obj = new THREE.Object3D();
     var material = new THREE.MeshBasicMaterial({ color: group_def.color });
@@ -51,6 +55,30 @@ Enemy.prototype.move = function(now, dt, player_obj) {
                 if (this.move_to(dt, this.path[this.path_index], 5)) {
                     this.path_index++;
                 }
+            }
+        } else if(this.group_def.movement == "diagonal") {
+            var d = dt * this.group_def.speed;
+            if(Math.random() * 50 <= 1) this.diag_dir = (Math.random() * 4)|0;
+            if(this.diag_dir == NW) {
+                this.obj.position.x -= d;
+                this.obj.position.y += d;
+                if(this.obj.position.x <= -window.innerWidth/2) this.diag_dir = NE;
+                if(this.obj.position.y > window.innerHeight/2) this.diag_dir = SW;
+            } else if(this.diag_dir == NE) {
+                this.obj.position.x += d;
+                this.obj.position.y += d;
+                if(this.obj.position.x >= window.innerWidth/2) this.diag_dir = NW;
+                if(this.obj.position.y > window.innerHeight/2) this.diag_dir = SE;
+            } else if(this.diag_dir == SW) {
+                this.obj.position.x -= d;
+                this.obj.position.y -= d;
+                if(this.obj.position.x <= -window.innerWidth/2) this.diag_dir = SE;
+                if(this.obj.position.y <= -window.innerHeight/2) this.diag_dir = NW;
+            } else if(this.diag_dir == SE) {
+                this.obj.position.x += d;
+                this.obj.position.y -= d;
+                if(this.obj.position.x >= window.innerWidth/2) this.diag_dir = SW;
+                if(this.obj.position.y <= -window.innerHeight/2) this.diag_dir = NE;
             }
         } else {
             // aim for the player
