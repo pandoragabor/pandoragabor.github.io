@@ -16,11 +16,8 @@ function Enemy(group_def, leader) {
     this.diag_dir = NW;
 
     this.obj = new THREE.Object3D();
-    var material = new THREE.MeshBasicMaterial({ color: group_def.color });
-    this.obj.add(new THREE.Mesh(new THREE.BoxGeometry(group_def.size * 2, group_def.size / 6, 10), material));
-    var b = new THREE.Mesh(new THREE.BoxGeometry(group_def.size, group_def.size, 10), material);
-    b.rotation.z = deg2rad(45);
-    this.obj.add(b);
+    this.obj.add(new THREE.Mesh(new THREE.IcosahedronGeometry(group_def.size), new THREE.MeshBasicMaterial({ color: group_def.color })));
+    this.obj.add(new THREE.Mesh(new THREE.IcosahedronGeometry(group_def.size + 5), new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true })));
     this.obj.position.x = this.leader == null ? window.innerWidth/2 : this.leader.obj.position.x + group_def.size * 2;
 }
 
@@ -35,6 +32,7 @@ Enemy.prototype.move_to = function(dt, point, min_dist) {
 };
 
 Enemy.prototype.move = function(now, dt, player_obj) {
+    this.obj.rotation.x += dt * 0.01;
     if(this.leader == null) {
         if (this.group_def.movement == "elliptical") {
             if (this.path == null || this.path_index >= 1) {

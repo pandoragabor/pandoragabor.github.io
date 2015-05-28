@@ -8,6 +8,7 @@
     <script src="src/bullet.js"></script>
     <script src="src/tunnel.js"></script>
     <script src="src/enemy.js"></script>
+    <script src="src/booster.js"></script>
     <script src="src/bounce.js"></script>
     <link rel="stylesheet" type="text/css" href="css/csshake.min.css">
     <link href='http://fonts.googleapis.com/css?family=Sigmar+One' rel='stylesheet' type='text/css'>
@@ -49,7 +50,7 @@
         }
         .indash {
             float: left;
-            width: 33%;
+            width: 25%;
             color: #82c4ff;
             -webkit-text-stroke: 1px black;
             text-shadow:
@@ -58,7 +59,7 @@
                 -1px 1px 0 #000,
                  1px 1px 0 #000;
         }
-        #shields {
+        #shields,#power {
             text-align: center;
         }
         #level {
@@ -91,6 +92,7 @@
 <div id="dashboard" style="display: none;">
     <div id="score" class="indash">Score: <span id="score_value">0</span></div>
     <div id="shields" class="indash">Shields: <span id="shields_value">100</span>%</div>
+    <div id="power" class="indash">Power: <span id="power_value">1</span></div>
     <div id="level" class="indash">Level: <span id="level_value">1</span></div>
 </div>
 <script>

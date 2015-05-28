@@ -53,6 +53,10 @@ function Bounce() {
     this.shields = 100;
     this.fxs = [];
     this.last_collision = 0;
+    this.boosters = [];
+    this.last_booster = 0;
+    this.power = 1;
+    this.power_timer = 0;
 }
 
 Bounce.start = function() {
@@ -165,9 +169,14 @@ Bounce.prototype.onWindowResize = function() {
 };
 
 Bounce.prototype.move_bullets = function(now, dt) {
+    if(this.power_timer > 0 && now - this.power_timer >= 5000) {
+        this.power_timer = 0;
+        this.power = 1;
+        $("#power_value").empty().append(window.bounce.power);
+    }
     if(this.shooting && now - this.last_bullet > RATE_OF_FIRE) {
         this.last_bullet = now;
-        var b = new Bullet(this.ship.position.x, this.ship.position.y);
+        var b = new Bullet(this.ship.position.x, this.ship.position.y, this.power);
         this.bullets.push(b);
         this.scene.add(b.obj);
     }
@@ -189,9 +198,9 @@ Bounce.prototype.start_explosion = function(point) {
     else this.explode2.play();
 };
 
-Bounce.prototype.enemy_hit = function(enemy_index, point) {
+Bounce.prototype.enemy_hit = function(enemy_index, point, power) {
     var e = this.enemies[enemy_index];
-    e.hits--;
+    e.hits -= power == 1 ? 1 : power * 2;
     if(e.hits <= 0) {
         // explosion fx
         this.start_explosion(point);
@@ -292,6 +301,15 @@ Bounce.prototype.play_level = function(now, dt) {
 
 Bounce.prototype.check_collisions = function(now, dt) {
     if(now - this.last_collision >= 1000) {
+        for(var i = 0; i < this.boosters.length; i++) {
+            if(this.boosters[i].overlaps(this.ship.position.x - 30, this.ship.position.y - 20,
+                    this.ship.position.x + 30, this.ship.position.y + 20)) {
+                this.boosters[i].booster_def.action(now);
+                this.scene.remove(this.boosters[i].obj);
+                this.boosters.splice(i, 1);
+                i--;
+            }
+        }
         for(var i = 0; i < this.enemies.length; i++) {
             if(this.enemies[i].overlaps(this.ship.position.x - 30, this.ship.position.y - 20,
                     this.ship.position.x + 30, this.ship.position.y + 20)) {
@@ -313,6 +331,22 @@ Bounce.prototype.check_collisions = function(now, dt) {
                 this.last_collision = now;
                 break;
             }
+        }
+    }
+};
+
+Bounce.prototype.play_boosters = function(now, dt) {
+    if(this.boosters.length < 3 && now - this.last_booster > 5000 + Math.random() * 10000) {
+        this.last_booster = now;
+        var booster = new Booster(BOOSTERS[(Math.random() * BOOSTERS.length)|0]);
+        this.boosters.push(booster);
+        this.scene.add(booster.obj);
+    }
+    for(var i = 0; i < this.boosters.length; i++) {
+        if(this.boosters[i].move(dt)) {
+            this.scene.remove(this.boosters[i].obj);
+            this.boosters.splice(i, 1);
+            i--;
         }
     }
 };
@@ -351,6 +385,7 @@ Bounce.prototype.animate = function() {
     this.tunnel2.move(dt, this.scene);
     this.play_level(now, dt);
     this.play_fxs(now, dt);
+    this.play_boosters(now, dt);
     this.check_collisions(now, dt);
 
     requestAnimationFrame(bind(this, this.animate));
